@@ -1,0 +1,47 @@
+.show_user{
+    width:100%;
+    padding:20px;
+    height:100vh;
+    background-color: whitesmoke;
+
+}
+
+.show_user > table{
+    font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+
+}
+ th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 10px;
+    font-weight: bold;
+  }
+
+ td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+   
+  .pagination_container{
+    width:50%;
+    border: 1px solid black;
+    margin: 50px auto;
+  }
+  .show_user-pagination_bar_con{
+   display: flex;
+   flex-direction: row;
+   justify-content:flex-start; 
+   align-content: center;
+  }
+  .page_box{
+    text-align: center;
+    font-size: 22px;
+    width:35px;
+    height: 35px;
+    background-color:white;
+    margin-right: 10px;
+    border:none;
+  }
