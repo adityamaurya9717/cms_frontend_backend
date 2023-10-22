@@ -66,7 +66,6 @@ const Transition = React.forwardRef(function Transition(
             <Button onClick={handleClose}>Close</Button>
           </DialogActions>
 
-          <DialogActions children={<div> hello</div>} />
           </div>
         </Dialog>
      

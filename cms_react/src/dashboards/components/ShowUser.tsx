@@ -5,6 +5,7 @@ import axios from "axios";
 
 import './css/showuser.css'
 import ShowUserRequest from '../../model/ShowUserRequest';
+import ConfirmDialog from '../../common/ConfirmDialog';
 
 let response = {
   pageNo:1,
@@ -29,6 +30,7 @@ const ShowUser = () => {
   const [users, setUsers] = useState(response);
   const [emailtype,setEmail] = useState('');
   const [pagination,setPagination] = useState(pageNo);
+  const [ userDelete , setUserDelete] = useState(false);
 
 
   const headers: Array<string> = ['FirstName', 'LastName', 'email', 'phone', 'delete']
@@ -83,6 +85,9 @@ const ShowUser = () => {
           console.error(ex)
        }
   }
+  const ConfirmDialogBoxHandler = (isSuccess:boolean)=>{
+        
+  }
 
   return (
     <div className="show_user">
@@ -90,6 +95,7 @@ const ShowUser = () => {
         <input type="text" placeholder='email' onChange={setEmailHandler}></input>
         <input type="text" placeholder='name' onChange={setEmailHandler}></input>
       </div>
+      <ConfirmDialog show={userDelete} successHandler={ConfirmDialogBoxHandler} />
       <table>
         <tr>
           {

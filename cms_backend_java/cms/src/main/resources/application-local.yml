@@ -13,6 +13,7 @@ spring:
       host: localhost
       port: 27017
       database: cms
+      auto-index-creation: true
   datasource:
    url: jdbc:mysql://localhost:3306/cms_test?createDatabaseIfNotExist=true
    username: root

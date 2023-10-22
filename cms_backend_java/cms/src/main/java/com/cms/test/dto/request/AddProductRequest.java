@@ -10,4 +10,8 @@ public class AddProductRequest {
     public String productName;
     public String productDescription;
     public String brandId;
+    public ProductAttributes productAttributes;
+    public ProductPrice productPrice;
+
+
 }
