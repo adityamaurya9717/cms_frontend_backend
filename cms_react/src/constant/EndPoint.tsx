@@ -6,7 +6,9 @@ const path = {
     cms:{
         adduser:'customer/show-user',
         getuser:'customer/get-user',
-        deleteuser:'customer/delete-user'
+        deleteuser:'customer/delete-user',
+        getAllBrands:'brand/get-allbrand',
+        addbrand:'brand/add-brand'
     }
 }
 

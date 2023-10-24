@@ -1,4 +1,6 @@
 import React, { lazy, useState,useMemo } from 'react';
+import './sidebar.css'
+
 import NavigationBar from './NavigationBar';
 import SideBar from './SideBar';
 import { Route, Routes,useNavigate,redirect } from 'react-router-dom';
@@ -8,6 +10,7 @@ import ShowUser from '../../dashboards/components/ShowUser';
 import ProductDashBoard from '../../dashboards/components/products/ProductDashBoard';
 import AddProduct from '../../dashboards/components/products/AddProduct';
 import ShowProduct from '../../dashboards/components/products/ShowProduct';
+import Brand from '../../dashboards/components/brand/Brand';
 const UserDashboard = lazy(() => import("../../dashboards/components/UserDashBoard"))
 
 const MainComponent = () => {
@@ -20,7 +23,7 @@ const MainComponent = () => {
     const sideBar: boolean = showSidebar ;
 
     return (
-        <div >
+        <div style={{ boxSizing: 'border-box' }} >
             <NavigationBar onSideBar={navigationBtnHandler} />
 
             <div className={sideBar == true ? "container" : "container_two"} >
@@ -42,7 +45,9 @@ const MainComponent = () => {
                             <Route path="add-product" element={<AddProduct />}></Route>
                             <Route path="show-product" element={<ShowProduct />}></Route>
                         </Route>
-                        <Route path="category" element={<Product />} />
+                        <Route path="category" element={<Brand />} />
+                        <Route path="brand" element={<Brand />} />
+
                     </Routes>
 
 

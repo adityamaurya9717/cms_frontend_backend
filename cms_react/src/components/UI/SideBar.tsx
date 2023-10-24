@@ -24,6 +24,8 @@ const menus: Array<any> = [
   { name: 'Add User', to: '/userdasboard' },
   { name: 'add Product', to: '/product' },
   { name: 'Add Category', to: '/category' },
+  { name: 'Add brand', to: '/brand' },
+
 ];
 
 

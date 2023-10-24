@@ -1,5 +1,6 @@
 .show_user{
     width:100%;
+    box-sizing: border-box;      
     padding:20px;
     height:100vh;
     background-color: whitesmoke;

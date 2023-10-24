@@ -3,12 +3,10 @@ package com.cms.test.mongodocument;
 
 import com.cms.test.dto.request.AddProductRequest;
 import com.cms.test.dto.request.ProductPrice;
+import com.cms.test.dto.request.UpdateProductRequest;
 import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.MongoId;
+import org.springframework.data.mongodb.core.mapping.*;
 
 @Data
 @Getter
@@ -37,6 +35,9 @@ public class ProductDocument {
     @Field(name = "categoryCode")
     private String categoryCode="";
 
+    @Field(name = "active",targetType = FieldType.BOOLEAN)
+    private boolean active;
+
     @DBRef
     private BrandDocument brandDetail;
 
@@ -48,8 +49,19 @@ public class ProductDocument {
         this.productId = request.getProductId();
         this.productName = request.getProductName();
         this.description = request.getProductDescription();
-        this.categoryCode = request.categoryId;
+        this.categoryCode = request.getCategoryId();
         this.productPrice = request.getProductPrice();
+        this.active = true;
+    }
+
+    // for product Update
+    public void updateProduct(UpdateProductRequest updateProductRequest){
+        this.productName = updateProductRequest.getProductName();
+        this.active = updateProductRequest.isActive();
+        this.description = updateProductRequest.getProductDescription();
+        this.categoryCode = updateProductRequest.getCategoryId();
+        this.productPrice = updateProductRequest.getProductPrice();
+
     }
 
 

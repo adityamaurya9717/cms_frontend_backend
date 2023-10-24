@@ -1,15 +1,18 @@
 .container{
     display: grid;
     grid-template-columns: 18% 82%;
-    column-gap: 5px;
+    column-gap: 0px;
     animation-name: on;
     animation-duration: 0.3s;
+
 }
 .container_two{
     display: grid;
-    grid-template-columns: 0px 100%;;
+    grid-template-columns: 0% 100%;;
     animation-name: off;
     animation-duration: 0.3s;
+    box-sizing: border-box;      
+
 }
 
 .sidebar {
@@ -19,16 +22,16 @@
 
 .content{
     height: 100vh;
-    background-color:lightgray;
+    background-color:white;
 
 }
 @keyframes off {
     0%   {grid-template-columns: 18% 82%;}
    
-    100% {grid-template-columns: 0px 100%;}
+    100% {grid-template-columns: 0% 100%;}
   }
   @keyframes on {
-    0%   {grid-template-columns: 0px 100%;}
+    0%   {grid-template-columns: 0% 100%;}
    
     100% {grid-template-columns: 18% 82%;}
   }

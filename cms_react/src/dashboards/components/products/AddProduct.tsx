@@ -1,9 +1,24 @@
-import React,{useState,useReducer} from 'react';
+import React,{useState,useReducer, useEffect} from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
-import { Button, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, FormControl, MenuItem, Paper, Select, SelectChangeEvent } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
+import { endPoint, path } from '../../../constant/EndPoint';
+let brandDetail:any = [{
+    brandId:'asas',
+    brandName:'sdsd'
+}]
 
+const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: 200,
+        width: 250,
+      },
+    },
+  };
+  
 
 const AddProduct = () => {
     console.log("ADD PRoduct")
@@ -16,21 +31,41 @@ const AddProduct = () => {
 
     const input = {
         productName :'',
-        productCategory:'',
-        productBrand:''
+        categoryId:'',
+        productDescription:'',
+        brandId:'',
+        productPrice:{
+
+        }
     }
-    const [productDetail,setProductDetail] = useState(input)
+    const [productForm,setProductForm] = useState(input)
+    const [brand,setBrands] = useState(brandDetail)
+
     
-    const setProductName = (e:any)=>{setProductDetail(preState=>{return {...preState, productName:e.target.value}})}
-    const setProductCategory = (e:any)=>{setProductDetail(preState=>{  
+    const setProductFormDetail = (e:any)=>{setProductForm(preState=>{return {...preState, [e.target.name]:e.target.value}})}
+    const setProductCategory = (e:any)=>{setProductForm(preState=>{  
             return {...preState, productCategory:e.target.value}}
             )}
 
     
        
     const onSubmit = ()=>{
-        console.log(productDetail)
+        console.log(productForm)
     }
+    // get All Brand
+    useEffect( ()=>{
+        console.log("use effect Caleed")
+      let url = endPoint.cms + path.cms.getAllBrands;
+       let res  = axios.get(url,{})
+         .then(res=>{
+            console.log("brandList",res)
+            setBrands([...res.data]) 
+           return res.data
+        })
+         .catch(err=>{
+            console.error(err)
+         })
+    },[])
     
 
     return (
@@ -38,29 +73,35 @@ const AddProduct = () => {
             <h3>Product Catalog</h3>
             <Box component="form" sx={boxStyle}>
                 <div>
-                    <TextField onChange={setProductName} label="Product Name" variant="outlined"></TextField>
+                    <TextField  name="productName" onChange={setProductFormDetail} label="Product Name" variant="outlined"></TextField>
                 </div>
                 <div>
-                    <TextField label="Product Name" variant="outlined"></TextField>
+                    <TextField name="productDescription" onChange={setProductFormDetail}     label="Product Description" variant="outlined"></TextField>
                 </div>
                 <div>
-                    <TextField label="Product Name" variant="outlined"></TextField>
+                    <TextField name="categoryId" onChange={setProductFormDetail} label="categoryId" variant="outlined"></TextField>
                 </div>
                 <div>
-                    <FormControl  sx={{ m: 0, minWidth: 250 }}>
-                        <InputLabel  id="demo-simple-select-autowidth-label">Product Brand</InputLabel>
-                        <Select
+                    <FormControl  sx={{ m: 0, width: 200 }}>
+                        <InputLabel  id="demo-simple-select-autowidth-label">Brand</InputLabel>
+
+                        <Select 
                             labelId="demo-simple-select-autowidth-label"
                             id="demo-simple-select-autowidth"
                             autoWidth
-                            label="Product Brand"
+                            label="Brands"
+                            name="brandId"
+                            onChange={setProductFormDetail}
+                            MenuProps={MenuProps}
+
                         >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={10}>Samsung</MenuItem>
-                            <MenuItem value={21}> MI</MenuItem>
-                            <MenuItem value={22}>Apple</MenuItem>
+                             {
+                                brand.map((data:any,index:number)=>{
+                                    return <MenuItem sx={{m:0,width:200}}  key={index}  value={data.brandId}>{data.brandName}</MenuItem>
+
+                                })
+                            }
+                           
                         </Select>
                     </FormControl>
                 </div>
@@ -69,7 +110,7 @@ const AddProduct = () => {
                         <InputLabel id="demo-simple-select-autowidth-label">Product Category</InputLabel>
                         <Select
                             onChange={setProductCategory}
-                            value={productDetail.productCategory}
+                            value={productForm.categoryId}
                             labelId="demo-simple-select-autowidth-label"
                             id="demo-simple-select-autowidth"
                             autoWidth
@@ -87,8 +128,12 @@ const AddProduct = () => {
                     </FormControl>
                 </div>
                 <div>
-
+                   
                 </div>
+            </Box>
+            <Box component="div">
+                <h1>Price Info</h1>
+
             </Box>
             <Box component="div" sx={boxSubmitStyle}>
                <Button onClick={onSubmit} variant="contained">Submit</Button>

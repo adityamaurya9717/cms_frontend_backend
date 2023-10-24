@@ -3,6 +3,8 @@
     height: 70px;
     background-color:lightblue;
     display: flex;
+    box-sizing: border-box;      
+
   justify-content: flex-start; /* Horizontally center */
   align-items: center; /* Vertically center */
     

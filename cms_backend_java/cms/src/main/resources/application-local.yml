@@ -45,3 +45,6 @@ logging:
       zaxxer:
         hikari:
           HikariConfig: debug
+
+upload:
+  basepath: D:\upload

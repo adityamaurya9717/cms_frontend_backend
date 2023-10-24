@@ -21,5 +21,13 @@ public class ProductController {
         return productService.addProduct(addProductRequest);
 
     }
+    @PostMapping("/update-product")
+    public ResponseEntity<?> updateProduct(@RequestBody AddProductRequest addProductRequest){
+        return productService.addProduct(addProductRequest);
+    }
+    @PostMapping("/update-product-price")
+    public ResponseEntity<?> updateProductPrice(@RequestBody AddProductRequest addProductRequest){
+        return productService.addProduct(addProductRequest);
+    }
 
 }

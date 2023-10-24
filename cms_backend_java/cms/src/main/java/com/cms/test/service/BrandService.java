@@ -1,6 +1,7 @@
 package com.cms.test.service;
 
 import com.cms.test.dto.request.AddBrandRequest;
+import com.cms.test.dto.request.GetBrandRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -13,4 +14,7 @@ public interface BrandService {
 
     ResponseEntity<?> updateBrand(AddBrandRequest request, HttpServletRequest httpServletRequest);
 
+    ResponseEntity<?> getBrands(GetBrandRequest request, HttpServletRequest httpServletRequest);
+
+    ResponseEntity<?> getAllBrands(HttpServletRequest httpServletRequest);
 }

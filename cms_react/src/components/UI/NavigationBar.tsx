@@ -1,7 +1,5 @@
 import React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-
-
 import './navigation.css'
 import { IconButton } from '@mui/material';
 const NavigationBar = (props:any)=>{
