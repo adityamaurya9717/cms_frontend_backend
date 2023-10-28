@@ -30,7 +30,7 @@ public class BrandController {
     }
     // get Brand
     @PostMapping("/get-brand")
-    public ResponseEntity<?> addBrand(@RequestBody GetBrandRequest request, HttpServletRequest httpServletRequest){
+    public ResponseEntity<?> addBrand(@RequestBody GetBrandRequest request, HttpServletRequest httpServletRequest) throws InterruptedException {
         return brandService.getBrands(request,httpServletRequest);
     }
     @GetMapping("/get-allbrand")

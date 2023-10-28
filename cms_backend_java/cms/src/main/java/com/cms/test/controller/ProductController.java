@@ -1,6 +1,7 @@
 package com.cms.test.controller;
 
 import com.cms.test.dto.request.AddProductRequest;
+import com.cms.test.dto.request.GetProductRequest;
 import com.cms.test.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,10 @@ public class ProductController {
     @PostMapping("/update-product-price")
     public ResponseEntity<?> updateProductPrice(@RequestBody AddProductRequest addProductRequest){
         return productService.addProduct(addProductRequest);
+    }
+    @PostMapping("/get-product")
+    public ResponseEntity<?> getProduct(@RequestBody GetProductRequest getProductRequest){
+        return productService.getProducts(getProductRequest);
     }
 
 }

@@ -2,21 +2,17 @@ package com.cms.test.service.impl;
 
 import com.cms.test.dto.request.AddBrandRequest;
 import com.cms.test.dto.request.GetBrandRequest;
+import com.cms.test.dto.response.BrandInfoResponse;
 import com.cms.test.dto.response.BrandResponse;
 import com.cms.test.mongodocument.BrandDocument;
 import com.cms.test.mongorepo.BrandDocumentRepo;
 import com.cms.test.service.BrandService;
 
-import com.mongodb.MongoException;
+import com.mongodb.MongoWriteException;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.DocumentCallbackHandler;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -44,11 +40,21 @@ public class BrandServiceImpl implements BrandService {
     private BrandDocumentRepo brandDocumentRepo;
     @Override
     public ResponseEntity<?> addBrand(AddBrandRequest request, HttpServletRequest httpServletRequest) {
-        BrandDocument brandDocument = new BrandDocument(request);
+        try {
+            BrandDocument brandDocument = new BrandDocument(request);
             brandDocument = brandDocumentRepo.save(brandDocument);
             brandDocument.setBrandId(brandDocument.getId());
             brandDocument = brandDocumentRepo.save(brandDocument);
             return ResponseEntity.ok(brandDocument);
+
+        }
+        catch (MongoWriteException mongoWriteException){
+            return ResponseEntity.badRequest().body(mongoWriteException.toString());
+        }
+        catch (Exception ex){
+            return ResponseEntity.badRequest().body(ex.toString());
+        }
+
     }
 
     @Override
@@ -86,10 +92,14 @@ public class BrandServiceImpl implements BrandService {
             criteria.add(criteria1);
         }
          Criteria BrandCri = Criteria.where("brandId").is(request.getBrandId());
-        query.addCriteria(new Criteria().orOperator(new Criteria().andOperator(criteria),BrandCri));
+        //query.addCriteria(new Criteria().orOperator(new Criteria().andOperator(criteria),BrandCri));
+        if(criteria.size()>0){
+            query.addCriteria(new Criteria().andOperator(criteria));
+        }
 
         long totalDocs  =  mongoTemplate.count(query,BrandDocument.class);
-        query.with(PageRequest.of(request.getPageNo()-1,request.getSize()));
+        //int offset = (request.getPageNo()-1) * request.getSize();
+        query.with(PageRequest.of(request.getPageNo(),request.getSize()));
 //        List<Document> documents = new ArrayList<>();
 //         mongoTemplate.executeQuery(query, "brand", new DocumentCallbackHandler() {
 //             @Override
@@ -99,23 +109,23 @@ public class BrandServiceImpl implements BrandService {
 //         });
         BasicQuery basicQuery = new BasicQuery(query.getQueryObject(), query.getFieldsObject());
         List<BrandDocument> brandDocuments  = mongoTemplate.find(query,BrandDocument.class);
-        List<BrandResponse> brandResponses = brandDocuments.stream().map(data-> new BrandResponse(data)).collect(Collectors.toList());
-
+        List<BrandInfoResponse> brandInfoResponse = brandDocuments.stream().map(data-> new BrandInfoResponse(data)).collect(Collectors.toList());
+        BrandResponse brandResponse = new BrandResponse(request.getPageNo(),totalDocs,brandInfoResponse);
         log.info("query={}",query.getQueryObject().toJson());
         
-        return ResponseEntity.ok(brandResponses);
+        return ResponseEntity.ok(brandResponse);
     }
 
     @Override
     public ResponseEntity<?> getAllBrands(HttpServletRequest httpServletRequest) {
         List<BrandDocument> brandDocumentList   =  brandDocumentRepo.findAll();
 
-        List<BrandResponse> brandResponses = new ArrayList<>();
+        List<BrandInfoResponse> brandInfoRespons = new ArrayList<>();
         for(BrandDocument brandDocument : brandDocumentList){
-            BrandResponse brandResponse = new BrandResponse();
-            BeanUtils.copyProperties(brandDocument,brandResponse);
-            brandResponses.add(brandResponse);
+            BrandInfoResponse brandInfoResponse = new BrandInfoResponse();
+            BeanUtils.copyProperties(brandDocument, brandInfoResponse);
+            brandInfoRespons.add(brandInfoResponse);
         }
-        return ResponseEntity.ok(brandResponses);
+        return ResponseEntity.ok(brandInfoRespons);
     }
 }

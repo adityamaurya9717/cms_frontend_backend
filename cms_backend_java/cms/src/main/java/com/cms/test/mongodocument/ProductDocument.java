@@ -8,6 +8,9 @@ import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Getter
 @Setter
@@ -28,6 +31,11 @@ public class ProductDocument {
 
     @Field(name = "description")
     private String description;
+
+    @Field(name = "brandId",targetType = FieldType.STRING)
+    private String brandId;
+
+    private List<String> countriesAvailableIn = new ArrayList<>();
 
     @Field(name = "categoryName")
     private String categoryName;
@@ -51,6 +59,8 @@ public class ProductDocument {
         this.description = request.getProductDescription();
         this.categoryCode = request.getCategoryId();
         this.productPrice = request.getProductPrice();
+        this.brandId = request.getBrandId();
+        this.countriesAvailableIn = request.getCountriesAvailableIn();
         this.active = true;
     }
 
@@ -61,6 +71,7 @@ public class ProductDocument {
         this.description = updateProductRequest.getProductDescription();
         this.categoryCode = updateProductRequest.getCategoryId();
         this.productPrice = updateProductRequest.getProductPrice();
+        this.brandId = updateProductRequest.getBrandId();
 
     }
 

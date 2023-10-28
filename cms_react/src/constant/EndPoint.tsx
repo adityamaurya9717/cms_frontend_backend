@@ -8,7 +8,10 @@ const path = {
         getuser:'customer/get-user',
         deleteuser:'customer/delete-user',
         getAllBrands:'brand/get-allbrand',
-        addbrand:'brand/add-brand'
+        addbrand:'brand/add-brand',
+        getBrands:'brand/get-brand',
+        updateBrand:'brand/update-brand'
+
     }
 }
 

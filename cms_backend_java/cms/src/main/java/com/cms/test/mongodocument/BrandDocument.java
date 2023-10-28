@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.time.LocalDateTime;
+
 @Data
 @Getter
 @Setter
@@ -27,12 +29,16 @@ public class BrandDocument {
     @Field(name = "active")
     private boolean active;
 
+    @Field(name = "createdOn")
+    private LocalDateTime createdOn;
+
     private String description;
 
     public BrandDocument(AddBrandRequest request){
         this.brandName = request.getBrandName().trim();
         this.description = request.getDescription();
         this.active = true;
+        this.createdOn = LocalDateTime.now();
     }
 
 
