@@ -1,0 +1,105 @@
+.filter_category_container{
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    margin: 20px auto;
+    background-color:whitesmoke;
+    padding: 10px 10px;
+    justify-content: flex-start;
+}
+.filter_category_container>div{
+   margin-left: 25px;
+}
+
+.filter_category_container>div>input{
+    height:35px;
+    min-width:220px;
+    border: none;
+    outline: none;
+
+    border-radius: 3px;
+    border-radius: 3px;
+    box-shadow: 3px 3px 2px black;
+
+}
+.filter_category_container>div>select{
+    height:30px;
+    outline: none;
+    max-width: 400px;
+    padding: 5px 5px;
+    border: none;
+    box-shadow: 3px 3px 3px black;
+}
+.filter_category_container>div>select>option{
+    appearance: none;
+     border: 10px;
+    width: 100%;
+    font-size: 1.15rem;
+    padding-top: 5px;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+    cursor: pointer;
+
+}
+
+
+.get_category_con{
+    width: 100%;
+    background-color: white;
+
+}
+
+.get_category_con> table{
+    border-collapse: collapse;
+    width: 80%;
+    margin: 0 auto;
+    
+}
+.get_category_con> table > thead{
+    display: block;
+    border: none;
+    background-color: aliceblue;
+    width: calc(100% - 25px);
+    height: 50px;
+}
+
+.get_category_con> table > thead > tr{
+    border: none;
+    display:table;
+    width:100%;
+    table-layout:fixed;
+    
+}
+.get_category_con> table > thead > tr >td{
+    text-align: center;
+    font-weight: bolder;
+    font-size: 20px;
+    border: none;
+}
+
+.get_category_con> table > tbody{
+    display: block;
+    height: 300px;
+    width: cal(100% + 50px);
+    overflow-y:overlay;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+
+}
+.get_category_con> table > tbody>tr {
+     display:table;
+     width:100%;
+     table-layout:fixed;
+     height: 50px;
+}
+.get_category_con> table > tbody>tr>td {
+    text-align: center;
+    font-size: 16px;
+}
+.get_category_con> table > tbody>tr:hover{
+    background-color: aliceblue;
+}
+
+

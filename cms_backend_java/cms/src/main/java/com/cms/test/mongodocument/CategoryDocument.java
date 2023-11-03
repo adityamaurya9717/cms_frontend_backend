@@ -1,5 +1,6 @@
 package com.cms.test.mongodocument;
 
+import com.cms.test.constant.CategoryLevel;
 import com.cms.test.dto.request.AddCategoryRequest;
 import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -31,6 +32,9 @@ public class CategoryDocument {
     @Indexed(unique = true)
     private String categoryName;
 
+    @Field(name = "categoryLevel")
+    private Integer categoryLevel;
+
     @Field(name = "createdOn")
     private LocalDateTime createdOn;
 
@@ -48,6 +52,6 @@ public class CategoryDocument {
         this.active=true;
         this.createdOn = LocalDateTime.now();
         this.updatedOn = LocalDateTime.now();
-        this.description = addCategoryRequest.getDescription();
+        this.description = addCategoryRequest.getCategoryDescription();
     }
 }

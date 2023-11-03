@@ -1,10 +1,12 @@
 package com.cms.test.utils;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class FileUtil {
 
     private static String BASEPATH;
@@ -31,5 +34,9 @@ public class FileUtil {
     public static void uploadFileToServer(InputStream inputStream,String fileName) throws IOException {
         Path path = Paths.get( FileUtil.BASEPATH , fileName);
         Files.copy(inputStream,path);
+    }
+    public static void uploadFileToServer(MultipartFile multipartFile, String fileName) throws IOException {
+        Path path = Paths.get( FileUtil.BASEPATH , fileName);
+        Files.copy( multipartFile.getInputStream(),path);
     }
 }

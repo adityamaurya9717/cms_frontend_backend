@@ -2,14 +2,11 @@ package com.cms.test.dto.request;
 
 import com.cms.test.constant.CategoryLevel;
 import lombok.Data;
-import lombok.NonNull;
 
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
-
 @Data
-public class AddCategoryRequest {
+public class GetCategoryRequest {
     private String parentId;
     private String categoryId;
     private String categoryName;
@@ -17,4 +14,8 @@ public class AddCategoryRequest {
     private CategoryLevel categoryLevel;
     private String categoryDescription;
 
+    private LocalDate from;
+
+    private int pageNo;
+    private int size;
 }

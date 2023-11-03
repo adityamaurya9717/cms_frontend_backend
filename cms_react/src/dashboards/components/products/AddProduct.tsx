@@ -9,12 +9,16 @@ let brandDetail:any = [{
     brandId:'asas',
     brandName:'sdsd'
 }]
+let categoryDetail:any = [{
+    categoryName:'',
+    categoryId:''
+}]
 
 const MenuProps = {
     PaperProps: {
       style: {
         maxHeight: 200,
-        width: 250,
+        width: 200,
       },
     },
   };
@@ -40,6 +44,8 @@ const AddProduct = () => {
     }
     const [productForm,setProductForm] = useState(input)
     const [brand,setBrands] = useState(brandDetail)
+    const [category,setCategory] = useState(categoryDetail)
+
 
     
     const setProductFormDetail = (e:any)=>{setProductForm(preState=>{return {...preState, [e.target.name]:e.target.value}})}
@@ -66,6 +72,20 @@ const AddProduct = () => {
             console.error(err)
          })
     },[])
+   // get ALL LEVEL THREE CAtegory
+    useEffect( ()=>{
+        console.log("use effect Caleed")
+      let url = endPoint.cms + path.cms.getALLCategory+"?categoryLevel=LEVEL_THREE";
+       let res  = axios.get(url,{})
+         .then(res=>{
+            console.log("categoryList",res)
+            setCategory([...res.data]) 
+           return res.data
+        })
+         .catch(err=>{
+            console.error(err)
+         })
+    },[])
     
 
     return (
@@ -82,13 +102,12 @@ const AddProduct = () => {
                     <TextField name="categoryId" onChange={setProductFormDetail} label="categoryId" variant="outlined"></TextField>
                 </div>
                 <div>
-                    <FormControl  sx={{ m: 0, width: 200 }}>
+                    <FormControl fullWidth sx={{ m: 0, width: 200 }}>
                         <InputLabel  id="demo-simple-select-autowidth-label">Brand</InputLabel>
 
                         <Select 
                             labelId="demo-simple-select-autowidth-label"
                             id="demo-simple-select-autowidth"
-                            autoWidth
                             label="Brands"
                             name="brandId"
                             onChange={setProductFormDetail}
@@ -97,7 +116,7 @@ const AddProduct = () => {
                         >
                              {
                                 brand.map((data:any,index:number)=>{
-                                    return <MenuItem sx={{m:0,width:200}}  key={index}  value={data.brandId}>{data.brandName}</MenuItem>
+                                    return <MenuItem  key={index}  value={data.brandId}>{data.brandName}</MenuItem>
 
                                 })
                             }
@@ -120,8 +139,8 @@ const AddProduct = () => {
                                 <em>None</em>
                             </MenuItem>
                            {
-                             getCategory().map(data=>{
-                                    return  <MenuItem value={22}>{data}</MenuItem>
+                             category.map((data:any,index:number)=>{
+                                    return  <MenuItem value={data.categoryName}>{data.categoryName}</MenuItem>
                                 })
                             }
                         </Select>

@@ -1,0 +1,19 @@
+.add-category-form-container{
+    width: 100%;
+    height: 100vh;
+   
+    background-color: white;
+    
+   }
+   
+   .add-category-form-container > form {
+     width: 80%;
+     margin: 10px auto;
+     display: grid;
+     grid-template-columns: auto auto auto;
+     justify-content: space-evenly;
+     row-gap: 50px;
+     border: 1px solid whitesmoke;
+     padding: 15px;
+    
+   }

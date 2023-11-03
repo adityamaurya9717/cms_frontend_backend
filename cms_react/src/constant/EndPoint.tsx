@@ -10,7 +10,11 @@ const path = {
         getAllBrands:'brand/get-allbrand',
         addbrand:'brand/add-brand',
         getBrands:'brand/get-brand',
-        updateBrand:'brand/update-brand'
+        updateBrand:'brand/update-brand',
+
+        getALLCategory:'category/get-all-category-bylevel',
+        getCategory:'category/get-category',
+        addcategory:'category/add-category'
 
     }
 }

@@ -11,6 +11,7 @@ import ProductDashBoard from '../../dashboards/components/products/ProductDashBo
 import AddProduct from '../../dashboards/components/products/AddProduct';
 import ShowProduct from '../../dashboards/components/products/ShowProduct';
 import Brand from '../../dashboards/components/brand/Brand';
+import AddCategory from '../../dashboards/components/category/AddCategory';
 const UserDashboard = lazy(() => import("../../dashboards/components/UserDashBoard"))
 
 const MainComponent = () => {
@@ -45,7 +46,7 @@ const MainComponent = () => {
                             <Route path="add-product" element={<AddProduct />}></Route>
                             <Route path="show-product" element={<ShowProduct />}></Route>
                         </Route>
-                        <Route path="category" element={<Brand />} />
+                        <Route path="category" element={<AddCategory />} />
                         <Route path="brand" element={<Brand />} />
 
                     </Routes>
