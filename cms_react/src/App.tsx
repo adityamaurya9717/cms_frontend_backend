@@ -13,6 +13,7 @@ function App() {
 
 
   return (
+    // Redux Provider
     <Provider store={store}>
       <BrowserRouter>
         <div >

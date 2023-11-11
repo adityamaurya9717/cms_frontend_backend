@@ -1,5 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
+import toogleSlice from './slice/toggleSlice'
 
+// config Store Contain a reducer 
 export default configureStore({
-  reducer: {},
+  reducer: {
+    toogle:toogleSlice.reducer
+  },
+  
 })

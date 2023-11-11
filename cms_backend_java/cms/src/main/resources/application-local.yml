@@ -32,15 +32,14 @@ spring:
 #logging
 logging:
   file:
-    path: /var/log/moglix/cms_test/
-    name: /var/log/moglix/cms_test/cms_test.log
+    path: /var/log/cms_test/
+    name: /var/log/cms_test/cms_test.log
   level:
     root: info
     org:
       springframework: info
       springframework.data.mongodb.core.MongoTemplate: DEBUG
       org.springframework.data.mongodb.repository.Query: DEBUG
-
     com:
       zaxxer:
         hikari:

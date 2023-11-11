@@ -14,7 +14,9 @@ const path = {
 
         getALLCategory:'category/get-all-category-bylevel',
         getCategory:'category/get-category',
-        addcategory:'category/add-category'
+        addcategory:'category/add-category',
+
+        uploadFile : 'upload/file'
 
     }
 }

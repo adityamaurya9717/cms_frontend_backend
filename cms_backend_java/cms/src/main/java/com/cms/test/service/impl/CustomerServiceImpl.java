@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,10 +32,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private UsersDao usersDao;
+
+    @Autowired
+    private PasswordEncoder bCryptPasswordEncoder;
     @Override
     public ResponseEntity<?> addCustomer(AddCustomerRequest request, HttpServletRequest httpServletRequest) {
-
-        UserEntity entity = new UserEntity(request);
+        String encodePassword = bCryptPasswordEncoder.encode(request.getPassword());
+        UserEntity entity = new UserEntity(request,encodePassword);
         userRepository.save(entity);
         return ResponseEntity.ok(entity);
     }

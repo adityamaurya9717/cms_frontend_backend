@@ -21,10 +21,10 @@ const ListItemStyle = {
 
 };
 const menus: Array<any> = [
-  { name: 'Add User', to: '/userdasboard' },
-  { name: 'add Product', to: '/product' },
-  { name: 'Add Category', to: '/category' },
-  { name: 'Add brand', to: '/brand' },
+  { name: 'Users', to: '/userdasboard' },
+  { name: 'Product', to: '/product' },
+  { name: 'Category', to: '/category' },
+  { name: 'Brand', to: '/brand' },
 
 ];
 

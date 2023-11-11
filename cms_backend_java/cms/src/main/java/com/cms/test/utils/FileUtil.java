@@ -9,11 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.Optional;
 
 @Component
@@ -35,8 +34,9 @@ public class FileUtil {
         Path path = Paths.get( FileUtil.BASEPATH , fileName);
         Files.copy(inputStream,path);
     }
-    public static void uploadFileToServer(MultipartFile multipartFile, String fileName) throws IOException {
+    public static String uploadFileToServer(MultipartFile multipartFile, String fileName) throws IOException {
         Path path = Paths.get( FileUtil.BASEPATH , fileName);
-        Files.copy( multipartFile.getInputStream(),path);
+        Files.copy( multipartFile.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
+        return FileUtil.BASEPATH + File.separator + fileName;
     }
 }

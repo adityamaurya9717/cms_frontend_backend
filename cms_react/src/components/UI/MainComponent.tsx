@@ -12,13 +12,19 @@ import AddProduct from '../../dashboards/components/products/AddProduct';
 import ShowProduct from '../../dashboards/components/products/ShowProduct';
 import Brand from '../../dashboards/components/brand/Brand';
 import AddCategory from '../../dashboards/components/category/AddCategory';
+import { useDispatch, useSelector } from 'react-redux';
+import toogleSlice from '../../slice/toggleSlice';
 const UserDashboard = lazy(() => import("../../dashboards/components/UserDashBoard"))
 
 const MainComponent = () => {
+    // to get state value from redux
+    const state = useSelector((state:any) => state.toogle.value)
+   const dispatch = useDispatch()
     const [showSidebar, setSideBar] = useState(true);
     const navigationBtnHandler = () => {
-        console.log("toggle slidebar")
-        setSideBar(preState => !preState)
+        console.log("toggle slidebar=",state)
+        //setSideBar(preState => !preState)
+        dispatch(toogleSlice.actions.toogle())
     }
     const navigate = useNavigate()
     const sideBar: boolean = showSidebar ;
@@ -26,8 +32,10 @@ const MainComponent = () => {
     return (
         <div style={{ boxSizing: 'border-box' }} >
             <NavigationBar onSideBar={navigationBtnHandler} />
+            {/* <NavigationBar onSideBar={dispatch(toogleSlice.actions.toogle())} /> */}
 
-            <div className={sideBar == true ? "container" : "container_two"} >
+
+            <div className={state == true ? "container" : "container_two"} >
                 <SideBar showSidebar={showSidebar} />
                 <div className="content">
 

@@ -32,6 +32,12 @@ public class UserEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "original_password", nullable = false)
+    private String originalPassword;
+
     @Column(name = "phone")
     private String phone;
 
@@ -51,14 +57,15 @@ public class UserEntity {
     private Boolean active = true;
 
 
-    public  UserEntity(AddCustomerRequest request){
+    public  UserEntity(AddCustomerRequest request,String encodedPassword){
         this.firstName = request.getFirstName();
         this.lastName = request.getLastName();
         this.email = request.getEmail();
         this.gender= request.getGender();
         this.designation = request.getDesignation();
         this.active = true;
-
+        this.password = encodedPassword;
+        this.originalPassword = request.getPassword();
     }
 
 }
