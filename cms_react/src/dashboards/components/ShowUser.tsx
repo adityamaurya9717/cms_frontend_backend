@@ -28,19 +28,34 @@ const ShowUser = () => {
   const pageNo = queryParams.get('pageNo')==null? 1 : queryParams.get('pageNo') ;  
 
   const [users, setUsers] = useState(response);
-  const [emailtype,setEmail] = useState('');
+  const [searchType,setSearchType] = useState<any>('');
   const [pagination,setPagination] = useState(pageNo);
   const [ userDelete , setUserDelete] = useState(false);
+  const [debounceTimer,setDebounceTimer] = useState<any>(null)
 
 
   const headers: Array<string> = ['FirstName', 'LastName', 'email', 'phone', 'delete']
   let url = endPoint.cms + path.cms.getuser
 
-  const setEmailHandler = (event:any)=>{
-    setEmail(preState=>{
-      return event.target.value;
-    })
-
+  const setSearchBarHandler = (event:any)=>{
+    if(debounceTimer!=null){
+      clearTimeout(debounceTimer)
+    }
+    setSearchType(event.target.value)
+   const newDebounceTimer = setTimeout(()=>{
+      // function which call api
+      let payload = {...requestPayload,pageNo:1,};
+      if(searchType.includes('@')){
+         payload.email = searchType;
+      }
+      else{
+        payload.name = searchType;
+      }
+      setSearchParams({ 'pageNo' : '2'});
+      console.log("timer=>",payload)
+    },500)
+    setDebounceTimer(newDebounceTimer);
+  
   }
   const setPaginationHandler = (event:any,pageNo:any)=>{
     setPagination(pageNo)
@@ -70,7 +85,7 @@ const ShowUser = () => {
     setSearchParams({ 'pageNo' : String(pagination==null?1:pagination) });
 
     _loadShowUser(pagination)
-  }, [emailtype,pagination])
+  }, [pagination])
 
   // delete customer
 
@@ -92,9 +107,9 @@ const ShowUser = () => {
   return (
     <div className="show_user">
       <div>
-        <input type="text" placeholder='email' onChange={setEmailHandler}></input>
-        <input type="text" placeholder='name' onChange={setEmailHandler}></input>
+        <input type="text" placeholder='Email or Name' onChange={setSearchBarHandler}></input>
       </div>
+      <br></br>
       <ConfirmDialog show={userDelete} successHandler={ConfirmDialogBoxHandler} />
       <table>
         <tr>

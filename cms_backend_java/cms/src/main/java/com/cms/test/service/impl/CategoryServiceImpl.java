@@ -54,9 +54,10 @@ public class CategoryServiceImpl implements CategoryService {
         if(!ObjectUtils.isEmpty(addCategoryRequest.getCategoryName()) && !addCategoryRequest.getCategoryName().startsWith("CAT")){
             query.addCriteria(Criteria.where("categoryName").regex(addCategoryRequest.getCategoryName()+".*","i"));
         }
+        long totalDocs  = mongoTemplate.count(query,CategoryDocument.class);
+
         query.with(PageRequest.of(addCategoryRequest.getPageNo(),addCategoryRequest.getSize()));
 
-        long totalDocs  = mongoTemplate.count(query,CategoryDocument.class);
         List<CategoryDocument> documents  = mongoTemplate.find(query,CategoryDocument.class);
         List<CategoryInfoResponse> infoResponses = documents.stream().map(data->new CategoryInfoResponse(data)).collect(Collectors.toList());
         CategoryResponse categoryResponse = new CategoryResponse(addCategoryRequest.getPageNo(),totalDocs,infoResponses);

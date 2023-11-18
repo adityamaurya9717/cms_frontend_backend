@@ -2,11 +2,12 @@ import React, { useState, useReducer, useEffect } from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
-import { Button, FormControl, MenuItem, Paper, Select, SelectChangeEvent } from '@mui/material';
+import { Button, Checkbox, FormControl, ListItemText, MenuItem, OutlinedInput, Paper, Select, SelectChangeEvent } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import { endPoint, path } from '../../../constant/EndPoint';
 import { useFormik } from 'formik';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CustomSnackBar from '../../../common/CustomSnackBar';
 
 let brandDetail: any = [{
     brandId: 'asas',
@@ -16,7 +17,19 @@ let categoryDetail: any = [{
     categoryName: '',
     categoryId: ''
 }]
-
+interface Product {
+    productName: string;
+    categoryId: string;
+    productDescription: string;
+    brandId: string;
+    countriesAvailableIn: string[];
+    productPrice: {
+        mrp: string | null;
+        taxPercentage: string | null;
+        price: string | null;
+        sellingPrice: string | null;
+    };
+}
 const MenuProps = {
     PaperProps: {
         style: {
@@ -27,18 +40,21 @@ const MenuProps = {
 };
 
 const AddProduct = () => {
-    const input = {
+    const input:Product = {
         productName: '',
         categoryId: '',
         productDescription: '',
         brandId: '',
+        countriesAvailableIn: [],
         productPrice: {
             mrp: null,
             taxPercentage: null,
             price: null,
             sellingPrice: null
         }
+
     }
+    let countries:Array<string> = ['India','Pakistan'];
     const [productForm, setProductForm] = useState(input)
     // fetch data from API
     const [brand, setBrands] = useState(brandDetail)
@@ -46,30 +62,55 @@ const AddProduct = () => {
     const [category, setCategory] = useState(categoryDetail)
     const formik = useFormik({
         initialValues: {
-            productName: '',
-            categoryId: '',
-            productDescription: '',
-            brandId: '',
-            productPrice: {
-                mrp: '',
-                taxPercentage: '',
-                price: '',
-                sellingPrice: ''
-            }
+           ...input
         },
         onSubmit: (value) => {
             console.log("formik Submit=", value)
+            onSubmit(value)
         }
     })
 
-    // const setProductFormDetail = (e:any)=>{setProductForm(preState=>{return {...preState, [e.target.name]:e.target.value}})}
-    // const setProductCategory = (e:any)=>{setProductForm(preState=>{  
-    //         return {...preState, productCategory:e.target.value}}
-    //         )}
+    const data = {
+        open:false,
+        alertType:'success',
+        message:'Added Success Fully'
+       }
+    const [snackBarData,setSnackBar] = React.useState({...data});
+    const openOrCloseSnakBar = (isOpen:boolean)=>{
+        if(isOpen){
+          setSnackBar(prev=>{return {...prev,open:true,}})
+        }
+        else{
+          setSnackBar(prev=>{return {open:true,alertType:"error",message:"SomeThing Went Wrong"}})
+        }
+        // to set snackBar on Default Message
+        setTimeout(()=>{
+          setSnackBar(pre=>{return {...data} })
+         },2000)  
+      }
 
 
-    const onSubmit = () => {
-        console.log(productForm)
+  
+
+    const onSubmit = (payload:any) => {
+        console.log(payload)
+        let url = endPoint.cms + path.cms.addProduct;
+        (async()=>{
+            try{
+            let response =  await axios.post(url,payload,{})
+            let data = response.data;
+            console.log("Add Product REsposne=",data)
+            openOrCloseSnakBar(true)
+            //clearForm()
+            }
+            catch(err){
+                openOrCloseSnakBar(false)
+                console.error("Add Product Error=",err)
+                openOrCloseSnakBar(false)
+
+            }
+        })()
+
     }
     // get All Brand
     useEffect(() => {
@@ -100,16 +141,18 @@ const AddProduct = () => {
             })
     }, [])
 
+    
+
     const clearForm = () => {
         console.log("clear Form")
         formik.resetForm();
     }
     const [selectedFile, setSelectedFile] = useState<any>(null);
 
-      const handleFileChange = (event:any) => {
+    const handleFileChange = (event: any) => {
         console.log(event.target.files[0])
         setSelectedFile(event.target.files[0]);
-      };
+    };
     const uploadFile = (event: any) => {
         const formData = new FormData();
         formData.append('file', event.target.files[0]);
@@ -125,6 +168,7 @@ const AddProduct = () => {
     return (
         <div>
             <h3>Product Catalog</h3>
+            { snackBarData.open && <CustomSnackBar data={snackBarData}/>}
             <form onSubmit={formik.handleSubmit}>
                 <Box component="form" sx={boxStyle}>
 
@@ -135,7 +179,7 @@ const AddProduct = () => {
                         <TextField name="productDescription" value={formik.values.productDescription} onChange={formik.handleChange} label="Product Description" variant="outlined"></TextField>
                     </div>
                     <div>
-                        <TextField name="categoryId" value={formik.values.categoryId} onChange={formik.handleChange} label="categoryId" variant="outlined"></TextField>
+                        <TextField name="categoryId" disabled value={formik.values.categoryId} onChange={formik.handleChange} label="categoryId" variant="outlined"></TextField>
                     </div>
                     <div>
                         <label htmlFor="file-upload">
@@ -195,13 +239,42 @@ const AddProduct = () => {
                                 </MenuItem>
                                 {
                                     category.map((data: any, index: number) => {
-                                        return <MenuItem value={data.categoryName}>{data.categoryName}</MenuItem>
+                                        return <MenuItem key={index} value={data.categoryId}>{data.categoryName}</MenuItem>
                                     })
                                 }
                             </Select>
                         </FormControl>
                     </div>
                     <div>
+                        <FormControl sx={{ m: 0 ,minWidth: 250 }}>
+                            <InputLabel id="countries-checkbox">countries AvailableIn</InputLabel>
+                            <Select
+                                labelId="countries-checkbox"
+                                id="countries-checkbox"
+                                multiple
+                                value={formik.values.countriesAvailableIn}
+                                onChange={(e:any)=>{
+                                   // formik.values.countriesAvailableIn.push(e.target.value)
+                                    let val = typeof e.target.value === 'string' ? e.target.value.split(',') : e.target.value;
+                                    formik.setFieldValue("countriesAvailableIn",val)
+                                }
+         
+                                }
+                                input={<OutlinedInput label="Tag" />}
+                                renderValue={(selected) => selected.join(', ')}
+                                MenuProps={MenuProps}
+                            >
+                                {
+                                    countries.map((data:string,index:number)=>{
+                                      return <MenuItem key={index} value={data}>
+                                         <Checkbox checked={formik.values.countriesAvailableIn.indexOf(data)>-1} />
+                                        <ListItemText primary={data} />
+                                       </MenuItem>  
+                                    })
+                                }
+                                </Select>
+
+                        </FormControl>
 
                     </div>
                 </Box>

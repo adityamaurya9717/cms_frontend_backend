@@ -1,9 +1,12 @@
 server:
   port: 8080
 
+
 spring:
   application:
     name: CMS_TEST
+  jwt:
+    secretkey: adityaismynameanditsnotgoodtostorekeyinthisadityaismynameanditsnotgoodtostorekeyinthisadityaismynameanditsnotgoodtostorekeyinthisadityaismynameanditsnotgoodtostorekeyinthis
   servlet:
     multipart:
       max-file-size: 10MB

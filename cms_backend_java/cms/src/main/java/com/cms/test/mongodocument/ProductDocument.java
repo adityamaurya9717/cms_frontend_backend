@@ -4,6 +4,7 @@ package com.cms.test.mongodocument;
 import com.cms.test.dto.request.AddProductRequest;
 import com.cms.test.dto.request.ProductPrice;
 import com.cms.test.dto.request.UpdateProductRequest;
+import com.cms.test.utils.CommonUtils;
 import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
@@ -53,8 +54,8 @@ public class ProductDocument {
 
 
 
-    public  ProductDocument(AddProductRequest request){
-        this.productId = request.getProductId();
+    public  ProductDocument(AddProductRequest request,long id){
+        this.productId = "PRO"+ CommonUtils.randomString(5)+id;
         this.productName = request.getProductName();
         this.description = request.getProductDescription();
         this.categoryCode = request.getCategoryId();
@@ -66,13 +67,33 @@ public class ProductDocument {
 
     // for product Update
     public void updateProduct(UpdateProductRequest updateProductRequest){
-        this.productName = updateProductRequest.getProductName();
-        this.active = updateProductRequest.isActive();
-        this.description = updateProductRequest.getProductDescription();
-        this.categoryCode = updateProductRequest.getCategoryId();
+        //this.productName = updateProductRequest.getProductName();
+        //this.active = updateProductRequest.isActive();
+       // this.description = updateProductRequest.getProductDescription();
+       // this.categoryCode = updateProductRequest.getCategoryId();
         this.productPrice = updateProductRequest.getProductPrice();
         this.brandId = updateProductRequest.getBrandId();
+    }
 
+    private void updateProductPrice(ProductPrice productPrice){
+        if(this.productPrice==null){
+            ProductPrice price = new ProductPrice();
+            price.setTaxPercentage(productPrice.getTaxPercentage());
+            price.setSellingPrice(productPrice.getSellingPrice());
+            price.setMrp(productPrice.getMrp());
+        }
+        else{
+            if(productPrice.getSellingPrice()>0){
+                this.productPrice.setSellingPrice(productPrice.getSellingPrice());
+            }
+            if(productPrice.getTaxPercentage()>0){
+                this.productPrice.setTaxPercentage(productPrice.getTaxPercentage());
+
+            }
+            if(productPrice.getMrp()>0){
+                this.productPrice.setMrp(productPrice.getMrp());
+            }
+        }
     }
 
 

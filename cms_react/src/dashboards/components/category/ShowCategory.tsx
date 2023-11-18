@@ -11,7 +11,7 @@ type CategoryListResponse = {
     categoryName: string,
     categoryLevel: string
     categoryDescription: string,
-    active: string,
+    active: boolean,
     parentId: string
   }>
 
@@ -23,7 +23,7 @@ type GetCategoryStruct = {
     size: number,
     totalCount: number,
     categoryList: CategoryListResponse["categoryList"]
-  } | null,
+  },
   success: boolean,
   message: string,
 }
@@ -43,7 +43,7 @@ let CategoryResponse: GetCategoryStruct = {
 let GetCategoryPayload = {
   pageNo: 0,
   size: 10,
-  categoryLevel: 'LEVEL_THREE',
+  categoryLevel: null,
   categoryName: '',
   active: true
 }
@@ -52,60 +52,58 @@ function ShowCategory() {
   // State for the input value and a timer
   const [categoryNameInput, setCategoryNameInput] = useState('');
   const [debounceTimer, setDebounceTimer] = useState<any>(null);
-  const [categoryPayload,setCategoryPayload]= useState({...GetCategoryPayload})
+  const [categoryPayload, setCategoryPayload] = useState({ ...GetCategoryPayload })
 
-  const [categoryList, setCategoryList] = useState([{
-    categoryName: '',
-    categoryLevel: '',
-    categoryDescription: '',
-    active: false,
-    parentId: ''
 
-  }]);
+  const [categoryResponse, setCategoryResponse] = useState({ ...CategoryResponse });
+  const setPaginationHandler = (event: any, pageNo: any) => {
+    setCategoryPayload(preState => {
+      return { ...preState, pageNo: pageNo }
+    })
+  }
 
-   // Function to handle changes in the input field
-   const handleCategoryNameChange = (e:any) => {
+  // Function to handle changes in the input field
+  const handleCategoryNameChange = (e: any) => {
     const value = e.target.value;
     setCategoryNameInput(value);
-      // Clear the previous debounce timer
-       if (debounceTimer) {
-          clearTimeout(debounceTimer);
-         }
+    // Clear the previous debounce timer
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
 
-        // Set a new debounce timer to delay the HTTP request by 500 milliseconds
-         const newDebounceTimer = setTimeout(() => {
-               setCategoryPayload({ ...categoryPayload, categoryName: value });
-           }, 500);
+    // Set a new debounce timer to delay the HTTP request by 500 milliseconds
+    const newDebounceTimer = setTimeout(() => {
+      setCategoryPayload({ ...categoryPayload, categoryName: value });
+    }, 500);
 
-         setDebounceTimer(newDebounceTimer);
+    setDebounceTimer(newDebounceTimer);
   };
 
- 
+
   console.log(categoryPayload)
 
-  const requestPayloadHandler = (e:any)=>{
-      console.log("",e.target.name,e.target.value)
-      setCategoryPayload((pre)=>{
-       let feildName = e.target.name
-       if(feildName=='active'){
-        return {...pre,[e.target.name]:e.target.value=='true'?true:false}
-       }
-        return {...pre,[e.target.name]:e.target.value}
-      })
+  const requestPayloadHandler = (e: any) => {
+    console.log("", e.target.name, e.target.value)
+    setCategoryPayload((pre) => {
+      let feildName = e.target.name
+      if (feildName == 'active') {
+        return { ...pre, [e.target.name]: e.target.value == 'true' ? true : false }
+      }
+      return { ...pre, [e.target.name]: e.target.value }
+    })
 
   }
   async function call() {
     try {
       let url = endPoint.cms + path.cms.getCategory
-      let response = await axios.post(url,categoryPayload , {});
+      let response = await axios.post(url, categoryPayload, {});
       console.log(response)
       let data = response.data;
       console.log("data=>", data)
       if (data.success == false) {
         throw new Error();
       }
-      let list = data.data.categoryList
-      setCategoryList([...list])
+      setCategoryResponse({...data})
     }
     catch (err) {
       console.error("error in getting getCategory", err)
@@ -123,7 +121,7 @@ function ShowCategory() {
       {/*  search Category By Filter */}
 
       <div className='filter_category_container'>
-        <div> <input  onChange={handleCategoryNameChange}  name="categoryName" placeholder='CategoryCode Or CategoryName' ></input> </div>
+        <div> <input onChange={handleCategoryNameChange} name="categoryName" placeholder='CategoryCode Or CategoryName' ></input> </div>
         <div>
           <select onChange={requestPayloadHandler} name="categoryLevel">
             <option value="NONE">Select Category Level</option>
@@ -134,8 +132,8 @@ function ShowCategory() {
           </select>
         </div>
         <div>
-          <select  onChange={requestPayloadHandler} name="active">
-            <option  value="NONE">Select Category Level</option>
+          <select onChange={requestPayloadHandler} name="active">
+            <option value="NONE">Select Category Level</option>
             <option value="true">Active</option>
             <option value="false">InActive</option>
 
@@ -157,7 +155,7 @@ function ShowCategory() {
         <tbody  >
 
           {
-            categoryList.map((data, index) => {
+            categoryResponse.data?.categoryList.map((data, index) => {
               return (
                 <tr key={index}>
                   <td>{data.categoryName}</td>
@@ -169,19 +167,31 @@ function ShowCategory() {
             })
           }
 
-
-
         </tbody>
-
         <tfoot>
-
-
-
         </tfoot>
-
-
       </table>
       <div >
+        {/*
+          pagination bar
+           */
+           }
+        <div className="pagination_container" >
+          <div className="show_user-pagination_bar_con">
+            {
+              new Array(Math.ceil(categoryResponse.data?.totalCount / categoryPayload.size)).fill(1).map((data, index) => {
+                return (<button
+                  onClick={(e) => { setPaginationHandler(e, index) }}
+                  key={index}
+                  style={{ backgroundColor :index==categoryPayload.pageNo?'lightgreen':''}}
+                  className="page_box">
+                  {index + 1}
+                </button>);
+              })
+            }
+
+          </div>
+        </div>
 
       </div>
 

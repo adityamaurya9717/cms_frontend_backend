@@ -16,7 +16,11 @@ const path = {
         getCategory:'category/get-category',
         addcategory:'category/add-category',
 
-        uploadFile : 'upload/file'
+        uploadFile : 'upload/file',
+
+        getProduct :'product/get-product',
+        addProduct : 'product/add-product',
+        updateProduct: 'product/update-product'
 
     }
 }

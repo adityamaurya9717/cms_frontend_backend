@@ -7,7 +7,8 @@ import java.util.List;
 
 @Data
 public class UpdateProductRequest {
-    @NotEmpty(message = "productId cannot be Empty")
+    @NotEmpty(message = "id cannot be Empty")
+    public String id;
     public String productId;
     public String categoryId;
     public String productName;

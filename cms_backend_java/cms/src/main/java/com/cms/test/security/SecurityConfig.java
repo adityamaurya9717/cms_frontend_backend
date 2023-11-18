@@ -39,8 +39,9 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(allowPath).permitAll() // access these API with out token
-                .anyRequest().authenticated() // other than this token is validated
+                //.antMatchers(allowPath).permitAll() // access these API with out token
+                 //.anyRequest().authenticated() // other than this token is validated
+                .anyRequest().permitAll()
                 .and()
                 .httpBasic();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

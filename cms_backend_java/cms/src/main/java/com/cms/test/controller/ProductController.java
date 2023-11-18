@@ -2,16 +2,15 @@ package com.cms.test.controller;
 
 import com.cms.test.dto.request.AddProductRequest;
 import com.cms.test.dto.request.GetProductRequest;
+import com.cms.test.dto.request.UpdateProductRequest;
 import com.cms.test.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/api/product")
+@CrossOrigin
 public class ProductController {
 
     @Autowired
@@ -23,8 +22,8 @@ public class ProductController {
 
     }
     @PostMapping("/update-product")
-    public ResponseEntity<?> updateProduct(@RequestBody AddProductRequest addProductRequest){
-        return productService.addProduct(addProductRequest);
+    public ResponseEntity<?> updateProduct(@RequestBody UpdateProductRequest updateProductRequest){
+        return productService.updateProduct(updateProductRequest);
     }
     @PostMapping("/update-product-price")
     public ResponseEntity<?> updateProductPrice(@RequestBody AddProductRequest addProductRequest){
