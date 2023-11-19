@@ -14,6 +14,7 @@ import Brand from '../../dashboards/components/brand/Brand';
 import AddCategory from '../../dashboards/components/category/AddCategory';
 import { useDispatch, useSelector } from 'react-redux';
 import toogleSlice from '../../slice/toggleSlice';
+import Login from '../../publiccomponent/login/Login';
 const UserDashboard = lazy(() => import("../../dashboards/components/UserDashBoard"))
 
 const MainComponent = () => {
@@ -56,6 +57,7 @@ const MainComponent = () => {
                         </Route>
                         <Route path="category" element={<AddCategory />} />
                         <Route path="brand" element={<Brand />} />
+
 
                     </Routes>
 

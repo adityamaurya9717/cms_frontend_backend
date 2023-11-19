@@ -20,7 +20,9 @@ const path = {
 
         getProduct :'product/get-product',
         addProduct : 'product/add-product',
-        updateProduct: 'product/update-product'
+        updateProduct: 'product/update-product',
+
+        login : 'public/login'
 
     }
 }

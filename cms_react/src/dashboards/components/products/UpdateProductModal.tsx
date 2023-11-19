@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect, useRef, useCallback } from 'react'
 import * as Yup from 'yup';
 
 import { endPoint, path } from '../../../constant/EndPoint';
@@ -78,13 +78,15 @@ function UpdateProductModal(props: any) {
     useEffect(()=>{
         ( async ()=>{
         let res = await BrandService.getAllBrand();
-        console.log("get All brand",res)
+        //console.log("get All brand",res)
         setBrands(res)
+        //console.log(productData.brandId)
+        formik.setFieldValue("brandId",productData.brandId)
         })()
 
     },[])
 
-    const successOrfaliedSnakBar = (isSuccess:boolean,message:string)=>{
+    const successOrfaliedSnakBar = useCallback( (isSuccess:boolean,message:string)=>{
         if(isSuccess){
           setSnackBar(prev=>{return {...prev,alertType:"success",open:true,message:"Success Fully Added"}})
         }
@@ -95,10 +97,18 @@ function UpdateProductModal(props: any) {
         setTimeout(()=>{
           setSnackBar(pre=>{return {...data} })
          },2000)  
-      }
+      },[])
+
+
 
     const formik = useFormik({
-        initialValues: {...UpdateProductRequest,id:productData.id
+        initialValues: {...UpdateProductRequest,id:productData.id,
+            productPrice:{
+               mrp:productData.productPrice?.mrp,
+               sellingPrice:productData.productPrice?.sellingPrice,
+               taxPercentage:productData.productPrice?.taxPercentage
+
+            }
         },
         onSubmit: (value) => {
             console.log("formik Submit=", value)
@@ -106,9 +116,12 @@ function UpdateProductModal(props: any) {
 
         }
     })
-    const closeModelHandler = () => {
+    // const closeModelHandler = () => {
+    //     props.onCloseModelHandler(false)
+    // }
+    const closeModelHandler= useCallback(()=>{
         props.onCloseModelHandler(false)
-    }
+    },[]);
     // for update PRoduct Detail
     const updateProductDetail = (updateProductDetail: any) => {
         if (formik)
@@ -119,17 +132,15 @@ function UpdateProductModal(props: any) {
                 let response = await axios.post(url, updateProductDetail, {})
                 let data = response.data;
                 if(data.success==true){
-                    successOrfaliedSnakBar(true,data.message) 
+                    successOrfaliedSnakBar(true,data.message)
                 }
                 else{
                     successOrfaliedSnakBar(false,data.message) 
-
                 }
             }
             catch (err) {
                 console.error("Update Product Error =", err)
                 successOrfaliedSnakBar(false,"Some Thing went Wrong") 
-
             }
         })()
     }
@@ -190,7 +201,7 @@ function UpdateProductModal(props: any) {
                             >
                                 {
                                     brands.map((data: any, index: number) => {
-                                        return <MenuItem key={index} value={data.brandId}>{data.brandName}</MenuItem>
+                                        return <MenuItem  key={index} value={data.brandId}>{data.brandName}</MenuItem>
 
                                     })
                                 }
