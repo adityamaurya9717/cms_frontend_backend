@@ -10,6 +10,8 @@ public class WelcomeController {
 
     @GetMapping("/ping")
     public String ping(){
+        System.out.println("Fdfd");
+
         return "ping";
     }
 

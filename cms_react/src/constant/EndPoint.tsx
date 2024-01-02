@@ -22,7 +22,8 @@ const path = {
         addProduct : 'product/add-product',
         updateProduct: 'product/update-product',
 
-        login : 'public/login'
+        login : 'public/login',
+        role : 'role/roles'
 
     }
 }

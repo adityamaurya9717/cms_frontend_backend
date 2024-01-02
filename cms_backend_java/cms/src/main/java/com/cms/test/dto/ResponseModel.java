@@ -21,11 +21,27 @@ public class ResponseModel<T> {
        this.success = true;
         return this;
     }
+    public  ResponseModel success(String ...message){
+       this.message = "successFully Fetch";
+       if(message!=null ) {
+           this.message = message[0];
+       }
+        this.success = true;
+        return this;
+    }
 
-    public  ResponseModel failed(String message){
-        this.message = message;
+    public  ResponseModel failed(String ...message){
+       if(message!=null) {
+           this.message = message[0];
+       }
         this.success = false;
         return this;
     }
+
+    public static void main(String[] args) {
+
+    }
+
+
 
 }

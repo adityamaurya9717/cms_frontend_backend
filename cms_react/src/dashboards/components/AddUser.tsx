@@ -5,9 +5,12 @@ import { Formik, ErrorMessage, Field, Form } from 'formik';
 import { Routes, useNavigate } from 'react-router-dom';
 import './css/adduser.css'
 import AlertDialogSlide from '../../common/AlertDialog';
+import { endPoint, path } from '../../constant/EndPoint';
 const AddUser = () => {
     const navigate = useNavigate()
     const [dialogToogle,setDialogToogle] = useState(false);
+    const [role,setRole] = useState([]);
+
      const alertDialog = {
         message:"successfully added"
      }
@@ -18,6 +21,7 @@ const AddUser = () => {
         phone: '',
         state:'',
         gender:'',
+        roleId:''
     }
     const onCloseDialogHandler = ()=>{
         console.warn("dialog close called")
@@ -40,6 +44,24 @@ const AddUser = () => {
       console.log("out",result)
        
     }
+    // Fetch All Roles
+    React.useEffect(()=>{
+     (async ()=>{
+        try{
+        const url = endPoint.cms +  path.cms.role;
+         const res =  await axios.get(url);
+         const roleResponse = res.data;
+         const roleList = roleResponse.data;
+         console.log(roleList);
+         setRole(roleList)
+         }
+        catch(err){
+            console.error(err)
+        }
+
+     })()
+
+    },[])
 
 
     return (
@@ -96,6 +118,19 @@ const AddUser = () => {
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
                                 <option value="other">other</option>
+                               
+                            </Field>
+                            <ErrorMessage name="gender" component="div" />
+                        </div>
+                        <div>
+                            <label htmlFor="role">Role :</label>
+                            <Field as="select"  className="form_Feild" type="text" id="roleId" name="roleId" >
+                                <option>Select Role</option>
+                                {
+                                    role.map((data:any,index)=>{
+                                        return <option value={data.roleId} key={data.roleId}>{data.roleName}</option>
+                                    })
+                                }
                                
                             </Field>
                             <ErrorMessage name="gender" component="div" />

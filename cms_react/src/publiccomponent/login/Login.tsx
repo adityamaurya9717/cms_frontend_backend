@@ -5,17 +5,25 @@ import MainComponent from '../../components/UI/MainComponent';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { endPoint, path } from '../../constant/EndPoint';
+import { ResponseModel } from '../../model/ResponseModel';
+import { LoginResponse } from '../../model/LoginModel';
 
 
 function Login() {
-  const [isUserLogin,setUserLogin] = useState(false);
-  // 
+ let token  = localStorage.getItem("token-cms")
+  const [isUserLogin,setUserLogin] = useState(token==null?false:true);
+   
+  //
   const navigate = useNavigate();
   React.useEffect(() => {
-    if (isUserLogin == false) {
+    if (token==null || isUserLogin==false ) {
+      setUserLogin(false)
       navigate("login")
     }
-  }, [])
+    else{
+      setUserLogin(true)
+    }
+  }, [token])
   console.log("Login Component")
   const formik = useFormik({
     initialValues: {
@@ -29,18 +37,19 @@ function Login() {
   })
   const LoginHandler = useCallback((loginRequest: any) => {
     (async () => {
-      localStorage.setItem("token-cms", "Sdsdsds")
       try {
         let url = endPoint.cms + path.cms.login;
         let res = await axios.post(url, loginRequest, {})
-        let data = res.data;
+        let data = res.data as typeof LoginResponse;
         console.log(data)
-        if (data.success == false) {
+        if (data.success) {
+          localStorage.removeItem("token-cms");
+          let token = data.data["token"];      
+          localStorage.setItem("token-cms", token)
+          setUserLogin(true)
+          navigate("/")
           return;
         }
-        let token = data.data;
-        setUserLogin(true)
-        localStorage.setItem("token-cms", token)
       }
       catch (err) {
         console.error("Login Creditional Erro=", err)

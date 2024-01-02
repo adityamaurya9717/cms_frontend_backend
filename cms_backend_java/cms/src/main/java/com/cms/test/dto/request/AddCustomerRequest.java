@@ -1,8 +1,11 @@
 package com.cms.test.dto.request;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class AddCustomerRequest {
 
     private String firstName;
@@ -12,6 +15,8 @@ public class AddCustomerRequest {
     private String gender;
     private String phone;
     private String designation;
+
+    private Long roleId;
 
 
 }

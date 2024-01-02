@@ -55,6 +55,8 @@ public class UserEntity {
 
     @Column(name = "active")
     private Boolean active = true;
+    @Column(name = "role_id")
+    private Long roleId;
 
 
     public  UserEntity(AddCustomerRequest request,String encodedPassword){
@@ -66,6 +68,7 @@ public class UserEntity {
         this.active = true;
         this.password = encodedPassword;
         this.originalPassword = request.getPassword();
+        this.roleId = request.getRoleId();
     }
 
 }

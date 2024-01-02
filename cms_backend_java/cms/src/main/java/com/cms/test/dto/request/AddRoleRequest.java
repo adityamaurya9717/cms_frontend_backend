@@ -1,12 +1,14 @@
 package com.cms.test.dto.request;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class AddRoleRequest {
 
-    @NotEmpty(message = "roleName cannot be Empty")
-    private String RoleName;
+    private String roleName;
+    private List<String> authorityList;
 }
