@@ -1,6 +1,7 @@
 package com.cms.test.aspect;
 
 
+import com.cms.test.exception.CustomException;
 import com.cms.test.validation.ToJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +21,28 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class RequestPayloadLogging {
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Around("@annotation(com.cms.test.validation.ToJson)")
+    @Around("* com.cms.test.controller.*.*(..))")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
-        return joinPoint.proceed();
+        try {
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            HttpServletRequest request = attributes.getRequest();
+            log.info("request init for path={}", request.getPathInfo());
+            Object proceed = joinPoint.proceed();
+            log.info("request end for path={}", request.getPathInfo());
+            return proceed;
+        }
+        catch (Exception ex){
+            log.error("logExecutionTime ex={}",ex.getMessage());
+            if(ex instanceof CustomException){
+                throw (CustomException) ex;
+            }
+            if(ex instanceof RuntimeException){
+                throw (RuntimeException) ex;
+            }
+            throw ex;
+        }
     }
 
     @Before(value = "execution(* com.cms.test.controller.*.*(..))")

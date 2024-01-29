@@ -1,6 +1,9 @@
 package com.cms.test.security;
 
+import com.cms.test.exception.CustomException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +20,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -24,25 +28,27 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private CustomUserDetailServiceImpl customUserDetailsService;
 
-
     @Override
-
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
-        String jwt = getJWTFromRequest(request);
-        System.out.println("hee");
-        if (StringUtils.hasText(jwt) && tokenGenerator.validateToken(jwt)) {
-            String username = tokenGenerator.getUsernameFromJWT(jwt);
-            tokenGenerator.generateToken("sdsd");
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null,
-                    userDetails.getAuthorities());
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        try {
+            UserDetails userDetails = null;
+            String jwt = getJWTFromRequest(request);
+            if (StringUtils.hasText(jwt) && tokenGenerator.validateToken(jwt)) {
+                String username = tokenGenerator.getUsernameFromJWT(jwt);
+                tokenGenerator.generateToken("sdsd");
+                 userDetails = customUserDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null,
+                        userDetails.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
+        catch (Exception ex){
+            SecurityContextHolder.clearContext();
+        }
     }
 
     private String getJWTFromRequest(HttpServletRequest request) {
@@ -51,7 +57,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
         }
-        return null;
+        throw new CustomException( HttpStatus.UNAUTHORIZED,"Token not found");
     }
 
     @Override
