@@ -1,8 +1,9 @@
 package com.cms.test.aspect;
 
 
-import com.cms.test.exception.CustomException;
 import com.cms.test.validation.ToJson;
+import com.cms.test.exception.CustomException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -23,7 +24,7 @@ public class RequestPayloadLogging {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Around("* com.cms.test.controller.*.*(..))")
+  //  @Around("* com.cms.test.controller.*.*(..))")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -45,7 +46,7 @@ public class RequestPayloadLogging {
         }
     }
 
-    @Before(value = "execution(* com.cms.test.controller.*.*(..))")
+    //@Before(value = "execution(* com.cms.test.controller.*.*(..))")
     public void beforeAdvice(JoinPoint joinPoint) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = attributes.getRequest();

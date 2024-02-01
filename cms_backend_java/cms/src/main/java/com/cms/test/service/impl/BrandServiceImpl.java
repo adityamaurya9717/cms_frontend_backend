@@ -38,6 +38,13 @@ public class BrandServiceImpl implements BrandService {
 
     @Autowired
     private BrandDocumentRepo brandDocumentRepo;
+
+    /**
+     *  method to add a brand
+     * @param request
+     * @param httpServletRequest
+     * @return
+     */
     @Override
     public ResponseEntity<?> addBrand(AddBrandRequest request, HttpServletRequest httpServletRequest) {
         try {
@@ -116,6 +123,11 @@ public class BrandServiceImpl implements BrandService {
         return ResponseEntity.ok(brandResponse);
     }
 
+    /**
+     *  method to getting All Brands
+     * @param httpServletRequest
+     * @return
+     */
     @Override
     public ResponseEntity<?> getAllBrands(HttpServletRequest httpServletRequest) {
         List<BrandDocument> brandDocumentList   =  brandDocumentRepo.findAll();

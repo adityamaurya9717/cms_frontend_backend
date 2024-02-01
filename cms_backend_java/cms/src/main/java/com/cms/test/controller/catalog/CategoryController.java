@@ -1,4 +1,4 @@
-package com.cms.test.controller;
+package com.cms.test.controller.catalog;
 
 
 import com.cms.test.constant.CategoryLevel;

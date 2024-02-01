@@ -1,4 +1,4 @@
-package com.cms.test.controller;
+package com.cms.test.controller.catalog;
 
 import com.cms.test.dto.request.AddBrandRequest;
 import com.cms.test.dto.request.GetBrandRequest;
