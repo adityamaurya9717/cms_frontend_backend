@@ -10,13 +10,18 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
+
+/**
+ * Request Log Printer for Tracking Aspect Oriented Programming
+ */
 @Aspect
 @Component
 @Slf4j
@@ -24,7 +29,13 @@ public class RequestPayloadLogging {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-  //  @Around("* com.cms.test.controller.*.*(..))")
+    /**
+     * this method will call the before and after methods
+     * @param joinPoint
+     * @return
+     * @throws Throwable
+     */
+    @Around("execution(* com.cms.test.controller..*(..))")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         try {
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -44,6 +55,12 @@ public class RequestPayloadLogging {
             }
             throw ex;
         }
+    }
+
+    private void getLogDetail(HttpServletRequest request){
+        Map<String,String> map = new HashMap<>();
+        map.put("uri",request.getRequestURI());
+
     }
 
     //@Before(value = "execution(* com.cms.test.controller.*.*(..))")

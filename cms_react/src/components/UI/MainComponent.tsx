@@ -14,6 +14,7 @@ import Brand from '../../dashboards/components/brand/Brand';
 import AddCategory from '../../dashboards/components/category/AddCategory';
 import { useDispatch, useSelector } from 'react-redux';
 import toogleSlice from '../../slice/toggleSlice';
+import {toogle} from '../../slice/toggleSlice'
 import Login from '../../publiccomponent/login/Login';
 const UserDashboard = lazy(() => import("../../dashboards/components/UserDashBoard"))
 
@@ -25,7 +26,7 @@ const MainComponent = () => {
     const navigationBtnHandler = () => {
         console.log("toggle slidebar=",state)
         //setSideBar(preState => !preState)
-        dispatch(toogleSlice.actions.toogle())
+        dispatch(toogle())
     }
     const navigate = useNavigate()
     const sideBar: boolean = showSidebar ;

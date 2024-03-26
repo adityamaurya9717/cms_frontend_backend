@@ -8,7 +8,6 @@ const ProductDashBoard = ()=>{
         return isActive? {backgroundColor:'white'} : {backgroundColor:'lightblue'};
     }
 
- 
     return (
         <div style={box}>
            <header className="header-container">

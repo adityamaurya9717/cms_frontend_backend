@@ -7,18 +7,19 @@ import axios from 'axios';
 import { endPoint, path } from '../../constant/EndPoint';
 import { ResponseModel } from '../../model/ResponseModel';
 import { LoginResponse } from '../../model/LoginModel';
+import TokenService from '../../utils/TokenService'
 
 
 function Login() {
  let token  = localStorage.getItem("token-cms")
-  const [isUserLogin,setUserLogin] = useState(token==null?false:true);
+  const [isUserLogin,setUserLogin] = useState(true);
    
   //
   const navigate = useNavigate();
   React.useEffect(() => {
     if (token==null || isUserLogin==false ) {
-      setUserLogin(false)
-      navigate("login")
+      setUserLogin(true)
+      //navigate("login")
     }
     else{
       setUserLogin(true)
@@ -43,9 +44,10 @@ function Login() {
         let data = res.data as typeof LoginResponse;
         console.log(data)
         if (data.success) {
-          localStorage.removeItem("token-cms");
+          TokenService.remove("token-cms")
+          
           let token = data.data["token"];      
-          localStorage.setItem("token-cms", token)
+          TokenService.set("token-cms",token);
           setUserLogin(true)
           navigate("/")
           return;

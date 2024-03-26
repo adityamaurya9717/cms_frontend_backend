@@ -8,8 +8,9 @@ import {createSlice} from '@reduxjs/toolkit'
     reducers: {
       toogle : (state)=>{
          state.value = !state.value
+    
       }
     },
 })
-
-export default toogleSlice;
+export const {toogle} = toogleSlice.actions;
+export default toogleSlice.reducer;

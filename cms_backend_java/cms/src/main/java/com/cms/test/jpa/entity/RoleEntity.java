@@ -1,5 +1,6 @@
 package com.cms.test.jpa.entity;
 
+import com.cms.test.config.listener.AuditListener;
 import com.cms.test.dto.model.RoleDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,9 +15,9 @@ import java.util.Set;
 @Table(name = "role")
 @DynamicUpdate
 @Data
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditListener.class)
 @NoArgsConstructor
-public class RoleEntity {
+public class RoleEntity extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

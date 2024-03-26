@@ -8,8 +8,7 @@ class RestTemplate{
         }
         catch(err){
           throw err;
-        }
-    
+        }    
     }
     static get(url:string,headers:any):any{
         axios.get(url,headers)
