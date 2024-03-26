@@ -1,11 +1,15 @@
 package com.cms.test.security;
 
+import com.cms.test.exception.CustomException;
 import com.cms.test.jpa.entity.RoleEntity;
 import com.cms.test.jpa.entity.UserEntity;
 import com.cms.test.jpa.repository.RoleRepository;
 import com.cms.test.jpa.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -50,5 +54,21 @@ public class CustomUserDetailServiceImpl implements UserDetailsService {
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<String> authorities) {
         return authorities.stream().map(role -> new SimpleGrantedAuthority(role)).collect(Collectors.toList());
+    }
+
+    public boolean isLoggedInUser(){
+      Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+      if(authentication!=null && authentication.getCredentials() instanceof UserModel){
+          return true;
+      }
+      return false;
+    }
+    public UserModel getLoggedInUser(){
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+        if(authentication!=null && authentication.getCredentials() instanceof UserModel){
+            return (UserModel) authentication.getCredentials();
+
+        }
+        throw  new CustomException(HttpStatus.UNAUTHORIZED,"User Not Authorized");
     }
 }

@@ -1,6 +1,8 @@
 package com.cms.test.security;
 
 import com.cms.test.jpa.entity.UserEntity;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -10,6 +12,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
 public class UserModel extends User {
     private String firstName;
     private String lastname;
