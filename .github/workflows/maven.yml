@@ -28,7 +28,8 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package -DskipTests=true --file cms_backend_java/cms/pom.xml
+      working-directory: cms_backend_java/cms
+      run: mvn -B -DskipTests=true package
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
