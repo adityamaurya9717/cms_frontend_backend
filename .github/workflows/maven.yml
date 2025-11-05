@@ -10,6 +10,11 @@ name: Java CI with Maven for Spring
 
 on:
   workflow_dispatch:
+   inputs:
+      branch:
+        description: 'Select the branch to build'
+        required: true
+        default: 'debug'
 
 # on:
 #   push:
