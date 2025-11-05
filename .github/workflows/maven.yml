@@ -9,10 +9,13 @@
 name: Java CI with Maven
 
 on:
-  push:
-    branches: [ "debug" ]
-  pull_request:
-    branches: [ "debug" ]
+  workflow_dispatch:
+
+# on:
+#   push:
+#     branches: [ "debug" ]
+#   pull_request:
+#     branches: [ "debug" ]
 
 jobs:
   build:
